@@ -94,7 +94,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>2.7.12</version>
                 <configuration>
-                    <mainClass>com.maimai.Application</mainClass>
+                    <mainClass>com.indeed.Application</mainClass>
                     <layout>JAR</layout>
                 </configuration>
             </plugin>
