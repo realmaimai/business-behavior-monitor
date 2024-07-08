@@ -40,17 +40,6 @@ public class RedisPush implements IPush{
 
         redissonClient = Redisson.create(config);
         System.out.println("Redisson init success");
-
-        RTopic topic = redissonClient.getTopic("business-behavior-monitor-sdk-topic");
-        topic.addListener(LogMessage.class, new Listener());
-    }
-
-    class Listener implements MessageListener<LogMessage> {
-
-        @Override
-        public void onMessage(CharSequence charSequence, LogMessage logMessage) {
-            System.out.println("receive log message: " + JSON.toJSONString(logMessage));
-        }
     }
 
     @Override

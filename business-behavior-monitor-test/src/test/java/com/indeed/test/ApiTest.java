@@ -30,29 +30,10 @@ public class ApiTest {
 
     @Test
     public void test_log_01() throws InterruptedException {
-        log.info(user.toString());
-        // Initialize CountDownLatch with a count of 1
-        CountDownLatch latch = new CountDownLatch(1);
+        log.info("test01 {} {} {}", user.getUserId(), user.getUserName(), JSON.toJSONString(user));
 
-        // Use a separate thread to simulate the asynchronous logging completion
-        new Thread(() -> {
-            try {
-                // Simulate processing time
-                Thread.sleep(1000);
+        new CountDownLatch(1).await();
 
-                // Process log messages and then count down the latch
-                latch.countDown();
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
-        }).start();
-
-        // Wait for the latch to be counted down with a timeout
-        boolean completed = latch.await(5, TimeUnit.SECONDS);
-
-        if (!completed) {
-            log.error("Timeout waiting for log processing to complete");
-        }
     }
 
     @Data

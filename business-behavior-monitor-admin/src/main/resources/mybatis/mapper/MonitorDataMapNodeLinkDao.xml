@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.maimai.infrastructure.dao.IMonitorDataMapNodeLinkDao">
+
+    <resultMap type="com.maimai.infrastructure.po.MonitorDataMapNodeLink" id="MonitorDataMapNodeLinkMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="monitorId" column="monitor_id" jdbcType="VARCHAR"/>
+        <result property="fromMonitorNodeId" column="from_monitor_node_id" jdbcType="VARCHAR"/>
+        <result property="toMonitorNodeId" column="to_monitor_node_id" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!--query by id-->
+    <select id="queryById" resultMap="MonitorDataMapNodeLinkMap">
+        select
+id, monitor_id, from_monitor_node_id, to_monitor_node_id, create_time, update_time
+        from monitor_data_map_node_link
+        where id = #{id}
+    </select>
+
+    <!--query by specific value-->
+    <select id="queryAllByLimit" resultMap="MonitorDataMapNodeLinkMap">
+        select
+id, monitor_id, from_monitor_node_id, to_monitor_node_id, create_time, update_time
+        from monitor_data_map_node_link
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="monitorId != null and monitorId != ''">
+                and monitor_id = #{monitorId}
+            </if>
+            <if test="fromMonitorNodeId != null and fromMonitorNodeId != ''">
+                and from_monitor_node_id = #{fromMonitorNodeId}
+            </if>
+            <if test="toMonitorNodeId != null and toMonitorNodeId != ''">
+                and to_monitor_node_id = #{toMonitorNodeId}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime}
+            </if>
+        </where>
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--count-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from monitor_data_map_node_link
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="monitorId != null and monitorId != ''">
+                and monitor_id = #{monitorId}
+            </if>
+            <if test="fromMonitorNodeId != null and fromMonitorNodeId != ''">
+                and from_monitor_node_id = #{fromMonitorNodeId}
+            </if>
+            <if test="toMonitorNodeId != null and toMonitorNodeId != ''">
+                and to_monitor_node_id = #{toMonitorNodeId}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime}
+            </if>
+        </where>
+    </select>
+
+    <!--insert queries-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into monitor_data_map_node_link(monitor_id, from_monitor_node_id, to_monitor_node_id, create_time, update_time)
+        values (#{monitorId}, #{fromMonitorNodeId}, #{toMonitorNodeId}, #{createTime}, #{updateTime})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into monitor_data_map_node_link(monitor_id, from_monitor_node_id, to_monitor_node_id, create_time, update_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+        (#{entity.monitorId}, #{entity.fromMonitorNodeId}, #{entity.toMonitorNodeId}, #{entity.createTime}, #{entity.updateTime})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into monitor_data_map_node_link(monitor_id, from_monitor_node_id, to_monitor_node_id, create_time, update_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.monitorId}, #{entity.fromMonitorNodeId}, #{entity.toMonitorNodeId}, #{entity.createTime}, #{entity.updateTime})
+        </foreach>
+        on duplicate key update
+monitor_id = values(monitor_id),
+from_monitor_node_id = values(from_monitor_node_id),
+to_monitor_node_id = values(to_monitor_node_id),
+create_time = values(create_time),
+update_time = values(update_time)
+    </insert>
+
+    <!--update by id-->
+    <update id="update">
+        update monitor_data_map_node_link
+        <set>
+            <if test="monitorId != null and monitorId != ''">
+                monitor_id = #{monitorId},
+            </if>
+            <if test="fromMonitorNodeId != null and fromMonitorNodeId != ''">
+                from_monitor_node_id = #{fromMonitorNodeId},
+            </if>
+            <if test="toMonitorNodeId != null and toMonitorNodeId != ''">
+                to_monitor_node_id = #{toMonitorNodeId},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--delete by id-->
+    <delete id="deleteById">
+        delete from monitor_data_map_node_link where id = #{id}
+    </delete>
+
+</mapper>
+

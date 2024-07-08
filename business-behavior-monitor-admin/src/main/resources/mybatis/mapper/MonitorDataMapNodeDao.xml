@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.maimai.infrastructure.dao.IMonitorDataMapNodeDao">
+
+    <resultMap type="com.maimai.infrastructure.po.MonitorDataMapNode" id="MonitorDataMapNodeMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="monitorId" column="monitor_id" jdbcType="VARCHAR"/>
+        <result property="monitorNodeId" column="monitor_node_id" jdbcType="VARCHAR"/>
+        <result property="monitorNodeName" column="monitor_node_name" jdbcType="VARCHAR"/>
+        <result property="gatherSystemName" column="gather_system_name" jdbcType="VARCHAR"/>
+        <result property="gatherClazzName" column="gather_clazz_name" jdbcType="VARCHAR"/>
+        <result property="gatherMethodName" column="gather_method_name" jdbcType="VARCHAR"/>
+        <result property="loc" column="loc" jdbcType="VARCHAR"/>
+        <result property="color" column="color" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!--query by id-->
+    <select id="queryById" resultMap="MonitorDataMapNodeMap">
+        select
+id, monitor_id, monitor_node_id, monitor_node_name, gather_system_name, gather_clazz_name, gather_method_name, loc, color, create_time, update_time
+        from monitor_data_map_node
+        where id = #{id}
+    </select>
+
+    <!--query by specific value-->
+    <select id="queryAllByLimit" resultMap="MonitorDataMapNodeMap">
+        select
+id, monitor_id, monitor_node_id, monitor_node_name, gather_system_name, gather_clazz_name, gather_method_name, loc, color, create_time, update_time
+        from monitor_data_map_node
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="monitorId != null and monitorId != ''">
+                and monitor_id = #{monitorId}
+            </if>
+            <if test="monitorNodeId != null and monitorNodeId != ''">
+                and monitor_node_id = #{monitorNodeId}
+            </if>
+            <if test="monitorNodeName != null and monitorNodeName != ''">
+                and monitor_node_name = #{monitorNodeName}
+            </if>
+            <if test="gatherSystemName != null and gatherSystemName != ''">
+                and gather_system_name = #{gatherSystemName}
+            </if>
+            <if test="gatherClazzName != null and gatherClazzName != ''">
+                and gather_clazz_name = #{gatherClazzName}
+            </if>
+            <if test="gatherMethodName != null and gatherMethodName != ''">
+                and gather_method_name = #{gatherMethodName}
+            </if>
+            <if test="loc != null and loc != ''">
+                and loc = #{loc}
+            </if>
+            <if test="color != null and color != ''">
+                and color = #{color}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime}
+            </if>
+        </where>
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--count-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from monitor_data_map_node
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="monitorId != null and monitorId != ''">
+                and monitor_id = #{monitorId}
+            </if>
+            <if test="monitorNodeId != null and monitorNodeId != ''">
+                and monitor_node_id = #{monitorNodeId}
+            </if>
+            <if test="monitorNodeName != null and monitorNodeName != ''">
+                and monitor_node_name = #{monitorNodeName}
+            </if>
+            <if test="gatherSystemName != null and gatherSystemName != ''">
+                and gather_system_name = #{gatherSystemName}
+            </if>
+            <if test="gatherClazzName != null and gatherClazzName != ''">
+                and gather_clazz_name = #{gatherClazzName}
+            </if>
+            <if test="gatherMethodName != null and gatherMethodName != ''">
+                and gather_method_name = #{gatherMethodName}
+            </if>
+            <if test="loc != null and loc != ''">
+                and loc = #{loc}
+            </if>
+            <if test="color != null and color != ''">
+                and color = #{color}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime}
+            </if>
+        </where>
+    </select>
+
+    <!--insert queries-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into monitor_data_map_node(monitor_id, monitor_node_id, monitor_node_name, gather_system_name, gather_clazz_name, gather_method_name, loc, color, create_time, update_time)
+        values (#{monitorId}, #{monitorNodeId}, #{monitorNodeName}, #{gatherSystemName}, #{gatherClazzName}, #{gatherMethodName}, #{loc}, #{color}, #{createTime}, #{updateTime})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into monitor_data_map_node(monitor_id, monitor_node_id, monitor_node_name, gather_system_name, gather_clazz_name, gather_method_name, loc, color, create_time, update_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+        (#{entity.monitorId}, #{entity.monitorNodeId}, #{entity.monitorNodeName}, #{entity.gatherSystemName}, #{entity.gatherClazzName}, #{entity.gatherMethodName}, #{entity.loc}, #{entity.color}, #{entity.createTime}, #{entity.updateTime})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into monitor_data_map_node(monitor_id, monitor_node_id, monitor_node_name, gather_system_name, gather_clazz_name, gather_method_name, loc, color, create_time, update_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.monitorId}, #{entity.monitorNodeId}, #{entity.monitorNodeName}, #{entity.gatherSystemName}, #{entity.gatherClazzName}, #{entity.gatherMethodName}, #{entity.loc}, #{entity.color}, #{entity.createTime}, #{entity.updateTime})
+        </foreach>
+        on duplicate key update
+monitor_id = values(monitor_id),
+monitor_node_id = values(monitor_node_id),
+monitor_node_name = values(monitor_node_name),
+gather_system_name = values(gather_system_name),
+gather_clazz_name = values(gather_clazz_name),
+gather_method_name = values(gather_method_name),
+loc = values(loc),
+color = values(color),
+create_time = values(create_time),
+update_time = values(update_time)
+    </insert>
+
+    <!--update by id-->
+    <update id="update">
+        update monitor_data_map_node
+        <set>
+            <if test="monitorId != null and monitorId != ''">
+                monitor_id = #{monitorId},
+            </if>
+            <if test="monitorNodeId != null and monitorNodeId != ''">
+                monitor_node_id = #{monitorNodeId},
+            </if>
+            <if test="monitorNodeName != null and monitorNodeName != ''">
+                monitor_node_name = #{monitorNodeName},
+            </if>
+            <if test="gatherSystemName != null and gatherSystemName != ''">
+                gather_system_name = #{gatherSystemName},
+            </if>
+            <if test="gatherClazzName != null and gatherClazzName != ''">
+                gather_clazz_name = #{gatherClazzName},
+            </if>
+            <if test="gatherMethodName != null and gatherMethodName != ''">
+                gather_method_name = #{gatherMethodName},
+            </if>
+            <if test="loc != null and loc != ''">
+                loc = #{loc},
+            </if>
+            <if test="color != null and color != ''">
+                color = #{color},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--delete by id-->
+    <delete id="deleteById">
+        delete from monitor_data_map_node where id = #{id}
+    </delete>
+
+</mapper>
+

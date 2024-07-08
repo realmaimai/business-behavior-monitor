@@ -64,6 +64,11 @@
             <artifactId>redisson-spring-boot-starter</artifactId>
             <version>3.26.0</version>
         </dependency>
+        <dependency>
+            <groupId>com.maimai</groupId>
+            <artifactId>business-behavior-monitor-sdk</artifactId>
+            <version>1.0</version>
+        </dependency>
     </dependencies>
 
     <build>

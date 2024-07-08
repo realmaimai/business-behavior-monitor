@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.maimai.infrastructure.dao.IMonitorDataDao">
+
+    <resultMap type="com.maimai.infrastructure.po.MonitorData" id="MonitorDataMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="monitorId" column="monitor_id" jdbcType="VARCHAR"/>
+        <result property="monitorName" column="monitor_name" jdbcType="VARCHAR"/>
+        <result property="monitorNodeId" column="monitor_node_id" jdbcType="VARCHAR"/>
+        <result property="systemName" column="system_name" jdbcType="VARCHAR"/>
+        <result property="clazzName" column="clazz_name" jdbcType="VARCHAR"/>
+        <result property="methodName" column="method_name" jdbcType="VARCHAR"/>
+        <result property="attributeName" column="attribute_name" jdbcType="VARCHAR"/>
+        <result property="attributeField" column="attribute_field" jdbcType="VARCHAR"/>
+        <result property="attributeValue" column="attribute_value" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!--query by id-->
+    <select id="queryById" resultMap="MonitorDataMap">
+        select
+id, monitor_id, monitor_name, monitor_node_id, system_name, clazz_name, method_name, attribute_name, attribute_field, attribute_value, create_time, update_time
+        from monitor_data
+        where id = #{id}
+    </select>
+
+    <!--query by specific value-->
+    <select id="queryAllByLimit" resultMap="MonitorDataMap">
+        select
+id, monitor_id, monitor_name, monitor_node_id, system_name, clazz_name, method_name, attribute_name, attribute_field, attribute_value, create_time, update_time
+        from monitor_data
+        <where>
+            <if test="monitorData.id != null">
+                and id = #{monitorData.id}
+            </if>
+            <if test="monitorData.monitorId != null and monitorData.monitorId != ''">
+                and monitor_id = #{monitorData.monitorId}
+            </if>
+            <if test="monitorData.monitorName != null and monitorData.monitorName != ''">
+                and monitor_name = #{monitorData.monitorName}
+            </if>
+            <if test="monitorData.monitorNodeId != null and monitorData.monitorNodeId != ''">
+                and monitor_node_id = #{monitorData.monitorNodeId}
+            </if>
+            <if test="monitorData.systemName != null and monitorData.systemName != ''">
+                and system_name = #{monitorData.systemName}
+            </if>
+            <if test="monitorData.clazzName != null and monitorData.clazzName != ''">
+                and clazz_name = #{monitorData.clazzName}
+            </if>
+            <if test="monitorData.methodName != null and monitorData.methodName != ''">
+                and method_name = #{monitorData.methodName}
+            </if>
+            <if test="monitorData.attributeName != null and monitorData.attributeName != ''">
+                and attribute_name = #{monitorData.attributeName}
+            </if>
+            <if test="monitorData.attributeField != null and monitorData.attributeField != ''">
+                and attribute_field = #{monitorData.attributeField}
+            </if>
+            <if test="monitorData.attributeValue != null and monitorData.attributeValue != ''">
+                and attribute_value = #{monitorData.attributeValue}
+            </if>
+            <if test="monitorData.createTime != null">
+                and create_time = #{monitorData.createTime}
+            </if>
+            <if test="monitorData.updateTime != null">
+                and update_time = #{monitorData.updateTime}
+            </if>
+        </where>
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--count-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from monitor_data
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="monitorId != null and monitorId != ''">
+                and monitor_id = #{monitorId}
+            </if>
+            <if test="monitorName != null and monitorName != ''">
+                and monitor_name = #{monitorName}
+            </if>
+            <if test="monitorNodeId != null and monitorNodeId != ''">
+                and monitor_node_id = #{monitorNodeId}
+            </if>
+            <if test="systemName != null and systemName != ''">
+                and system_name = #{systemName}
+            </if>
+            <if test="clazzName != null and clazzName != ''">
+                and clazz_name = #{clazzName}
+            </if>
+            <if test="methodName != null and methodName != ''">
+                and method_name = #{methodName}
+            </if>
+            <if test="attributeName != null and attributeName != ''">
+                and attribute_name = #{attributeName}
+            </if>
+            <if test="attributeField != null and attributeField != ''">
+                and attribute_field = #{attributeField}
+            </if>
+            <if test="attributeValue != null and attributeValue != ''">
+                and attribute_value = #{attributeValue}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime}
+            </if>
+        </where>
+    </select>
+
+    <!--insert queries-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into monitor_data(monitor_id, monitor_name, monitor_node_id, system_name, clazz_name, method_name, attribute_name, attribute_field, attribute_value, create_time, update_time)
+        values (#{monitorId}, #{monitorName}, #{monitorNodeId}, #{systemName}, #{clazzName}, #{methodName}, #{attributeName}, #{attributeField}, #{attributeValue}, #{createTime}, #{updateTime})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into monitor_data(monitor_id, monitor_name, monitor_node_id, system_name, clazz_name, method_name, attribute_name, attribute_field, attribute_value, create_time, update_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+        (#{entity.monitorId}, #{entity.monitorName}, #{entity.monitorNodeId}, #{entity.systemName}, #{entity.clazzName}, #{entity.methodName}, #{entity.attributeName}, #{entity.attributeField}, #{entity.attributeValue}, #{entity.createTime}, #{entity.updateTime})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into monitor_data(monitor_id, monitor_name, monitor_node_id, system_name, clazz_name, method_name, attribute_name, attribute_field, attribute_value, create_time, update_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.monitorId}, #{entity.monitorName}, #{entity.monitorNodeId}, #{entity.systemName}, #{entity.clazzName}, #{entity.methodName}, #{entity.attributeName}, #{entity.attributeField}, #{entity.attributeValue}, #{entity.createTime}, #{entity.updateTime})
+        </foreach>
+        on duplicate key update
+monitor_id = values(monitor_id),
+monitor_name = values(monitor_name),
+monitor_node_id = values(monitor_node_id),
+system_name = values(system_name),
+clazz_name = values(clazz_name),
+method_name = values(method_name),
+attribute_name = values(attribute_name),
+attribute_field = values(attribute_field),
+attribute_value = values(attribute_value),
+create_time = values(create_time),
+update_time = values(update_time)
+    </insert>
+
+    <!--update by id-->
+    <update id="update">
+        update monitor_data
+        <set>
+            <if test="monitorId != null and monitorId != ''">
+                monitor_id = #{monitorId},
+            </if>
+            <if test="monitorName != null and monitorName != ''">
+                monitor_name = #{monitorName},
+            </if>
+            <if test="monitorNodeId != null and monitorNodeId != ''">
+                monitor_node_id = #{monitorNodeId},
+            </if>
+            <if test="systemName != null and systemName != ''">
+                system_name = #{systemName},
+            </if>
+            <if test="clazzName != null and clazzName != ''">
+                clazz_name = #{clazzName},
+            </if>
+            <if test="methodName != null and methodName != ''">
+                method_name = #{methodName},
+            </if>
+            <if test="attributeName != null and attributeName != ''">
+                attribute_name = #{attributeName},
+            </if>
+            <if test="attributeField != null and attributeField != ''">
+                attribute_field = #{attributeField},
+            </if>
+            <if test="attributeValue != null and attributeValue != ''">
+                attribute_value = #{attributeValue},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--delete by id-->
+    <delete id="deleteById">
+        delete from monitor_data where id = #{id}
+    </delete>
+
+</mapper>
+
