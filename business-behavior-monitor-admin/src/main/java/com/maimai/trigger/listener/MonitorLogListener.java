@@ -17,9 +17,9 @@ public class MonitorLogListener implements MessageListener<LogMessage> {
     @Override
     public void onMessage(CharSequence charSequence, LogMessage logMessage) {
         try {
-            log.info("listening monitor log message: {}", JSON.toJSONString(logMessage));
-        } catch ( Exception e ) {
-            log.error("listening monitor log message failed: {}", JSON.toJSONString(logMessage), e);
+            log.info("start monitoring successes: {}", JSON.toJSONString(logMessage));
+        } catch (Exception e) {
+            log.error("start monitoring failed: {}", JSON.toJSONString(logMessage));
         }
     }
 }

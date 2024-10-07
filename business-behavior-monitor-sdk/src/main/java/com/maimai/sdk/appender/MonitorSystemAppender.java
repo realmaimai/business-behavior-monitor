@@ -12,11 +12,11 @@ import java.util.Arrays;
 
 public class MonitorSystemAppender<E> extends AppenderBase<E> {
     private Logger logger = LoggerFactory.getLogger(MonitorSystemAppender.class);
-    // quick config for logging
+    // config for logging if this sdk is going to let other team to use
     private String systemName;
     private String groupId; // groupId that we want to monitor
-    private String host;
-    private int port;
+    private String host; // redis host
+    private int port; // redis port
     private IPush push;
 
 

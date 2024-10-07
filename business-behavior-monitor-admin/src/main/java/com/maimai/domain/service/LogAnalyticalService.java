@@ -25,50 +25,23 @@ public class LogAnalyticalService implements ILogAnalyticalService {
     public void doAnalytical(String systemName, String className, String methodName, List<String> logList) throws OgnlException {
         List<GatherNodeExpressionVO> gatherNodeExpressionVOs = repository.queryGatherNodeExpressionVO(systemName, className, methodName);
 
-        if (null == gatherNodeExpressionVOs || gatherNodeExpressionVOs.isEmpty()) {
-            return;
-        }
+        // no matched node
+        if (null == gatherNodeExpressionVOs || gatherNodeExpressionVOs.isEmpty()) return;
 
-        for (GatherNodeExpressionVO gatherNodeExpressionVO : gatherNodeExpressionVOs) {
-            String monitorName = repository.queryMonitorNameByMonitorId(gatherNodeExpressionVO.getMonitorId());
+        // handle each node
+        for (GatherNodeExpressionVO node : gatherNodeExpressionVOs) {
+            // get monitor name from monitor id
+            String monitorName = repository.queryMonitorNameByMonitorId(node.getMonitorId());
 
-            List<GatherNodeExpressionVO.Field> fields = gatherNodeExpressionVO.getFields();
-            for (GatherNodeExpressionVO.Field field : fields) {
+            List<GatherNodeExpressionVO.Field> fields = node.getFields();
+            for (GatherNodeExpressionVO.Field field: fields) {
+                // need to know what is the index of the required log
                 Integer logIndex = field.getLogIndex();
-
+                // because we set the name of the log is the first one so
                 String logName = logList.get(0);
-                if (!logName.equals(field.getLogName())) {
-                    continue;
-                }
-
-                String attributeValue = "";
+                // check the log name from parameter and from log list are the same
+                if (!logName.equals(field.getLogName())) continue;
                 String logStr = logList.get(logIndex);
-                if ("Object".equals(field.getLogType())) {
-                    OgnlContext context = new OgnlContext();
-                    context.setRoot(JSONObject.parseObject(logStr));
-                    Object root = context.getRoot();
-                    attributeValue = String.valueOf(Ognl.getValue(field.getAttributeOgnl(), context, root));
-                } else {
-                    attributeValue = logStr.trim();
-                    // xxx:xxx
-                    if (attributeValue.contains(Constants.COLON)) {
-                        attributeValue = attributeValue.split(Constants.COLON)[1].trim();
-                    }
-                }
-
-                MonitorDataEntity monitorDataEntity = MonitorDataEntity.builder()
-                        .monitorId(gatherNodeExpressionVO.getMonitorId())
-                        .monitorName(monitorName)
-                        .monitorNodeId(gatherNodeExpressionVO.getMonitorNodeId())
-                        .systemName(gatherNodeExpressionVO.getGatherSystemName())
-                        .clazzName(gatherNodeExpressionVO.getGatherClazzName())
-                        .methodName(gatherNodeExpressionVO.getGatherMethodName())
-                        .attributeName(field.getAttributeName())
-                        .attributeField(field.getAttributeField())
-                        .attributeValue(attributeValue)
-                        .build();
-
-                repository.saveMonitorData(monitorDataEntity);
             }
         }
     }

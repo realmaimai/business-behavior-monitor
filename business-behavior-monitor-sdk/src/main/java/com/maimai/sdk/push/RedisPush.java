@@ -40,6 +40,8 @@ public class RedisPush implements IPush{
 
         redissonClient = Redisson.create(config);
         System.out.println("Redisson init success");
+        RTopic topic = this.redissonClient.getTopic("business-behavior-monitor-sdk-topic");
+        topic.addListener(LogMessage.class, new Listener());
     }
 
     @Override
