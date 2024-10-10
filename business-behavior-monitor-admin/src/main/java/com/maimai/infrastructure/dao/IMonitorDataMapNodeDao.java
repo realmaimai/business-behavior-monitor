@@ -32,6 +32,8 @@ public interface IMonitorDataMapNodeDao {
      */
     List<MonitorDataMapNode> queryAllByLimit(MonitorDataMapNode monitorDataMapNode, @Param("pageable") Pageable pageable);
 
+    List<MonitorDataMapNode> queryMonitorDataMapNodeList(MonitorDataMapNode monitorDataMapNodeReq);
+
     /**
      * Count the total number of rows
      *

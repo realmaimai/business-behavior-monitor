@@ -25,6 +25,15 @@ id, monitor_id, monitor_name, monitor_node_id, system_name, clazz_name, method_n
         where id = #{id}
     </select>
 
+    <select id="queryMonitorDataMapEntityList" resultMap="dataMap">
+        select monitor_id, monitor_name from monitor_data_map
+    </select>
+
+    <select id="queryMonitorNameByMonitoryId" parameterType="java.lang.String" resultType="java.lang.String">
+        select monitor_name from monitor_data_map where monitor_id = #{monitorId}
+    </select>
+
+
     <!--query by specific value-->
     <select id="queryAllByLimit" resultMap="MonitorDataMap">
         select

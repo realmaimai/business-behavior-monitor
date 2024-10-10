@@ -81,5 +81,7 @@ public interface IMonitorDataMapDao {
      */
     int deleteById(Long id);
 
+    String queryMonitorNameByMonitorId(String monitorId);
+
 }
 

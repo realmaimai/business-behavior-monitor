@@ -16,6 +16,26 @@
         <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
     </resultMap>
 
+    <select id="queryMonitorDataMapNodeList" parameterType="plus.gaga.monitor.infrastructure.po.MonitorDataMapNode"
+            resultMap="dataMap">
+        select monitor_id, monitor_node_id, gather_system_name, gather_clazz_name, gather_method_name
+        from monitor_data_map_node
+        where gather_system_name = #{gatherSystemName} and gather_clazz_name = #{gatherClazzName} and gather_method_name
+            = #{gatherMethodName}
+    </select>
+
+    <select id="queryMonitorNodeConfigByMonitorId" parameterType="java.lang.String" resultMap="dataMap">
+        select monitor_node_id, monitor_node_name, loc, color
+        from monitor_data_map_node
+        where monitor_id = #{monitorId}
+    </select>
+
+    <update id="updateNodeConfig" parameterType="plus.gaga.monitor.infrastructure.po.MonitorDataMapNode">
+        update monitor_data_map_node set loc = #{loc}
+        where monitor_id = #{monitorId} and monitor_node_id = #{monitorNodeId}
+    </update>
+
+
     <!--query by id-->
     <select id="queryById" resultMap="MonitorDataMapNodeMap">
         select

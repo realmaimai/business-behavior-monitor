@@ -34,14 +34,44 @@ public class LogAnalyticalService implements ILogAnalyticalService {
             String monitorName = repository.queryMonitorNameByMonitorId(node.getMonitorId());
 
             List<GatherNodeExpressionVO.Field> fields = node.getFields();
-            for (GatherNodeExpressionVO.Field field: fields) {
+            for (GatherNodeExpressionVO.Field field : fields) {
                 // need to know what is the index of the required log
                 Integer logIndex = field.getLogIndex();
                 // because we set the name of the log is the first one so
                 String logName = logList.get(0);
                 // check the log name from parameter and from log list are the same
                 if (!logName.equals(field.getLogName())) continue;
+
                 String logStr = logList.get(logIndex);
+
+                String attributeValue = "";
+                // check if the log type is Object or String, if Object then use OGNL
+                if ("Object".equals(field.getLogType())) {
+                    OgnlContext context = new OgnlContext();
+                    context.setRoot(JSONObject.parse(logStr));
+                    Object root = context.getRoot();
+                    attributeValue = String.valueOf(Ognl.getValue(field.getAttributeOgnl(), context, root));
+                } else {
+                    attributeValue = logStr.trim();
+                    if (attributeValue.contains(Constants.COLON))
+                        attributeValue = attributeValue.split(Constants.COLON)[1].trim();
+
+                }
+
+                MonitorDataEntity monitorData = MonitorDataEntity.builder()
+                        .monitorId(node.getMonitorId())
+                        .monitorName(monitorName)
+                        .monitorNodeId(node.getMonitorNodeId())
+                        .systemName(systemName)
+                        .clazzName(className)
+                        .methodName(methodName)
+                        .attributeName(field.getAttributeName())
+                        .attributeField(field.getAttributeField())
+                        .attributeValue(attributeValue)
+                        .build();
+
+                repository.saveMonitorData(monitorData);
+
             }
         }
     }

@@ -16,6 +16,13 @@
         <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
     </resultMap>
 
+    <select id="queryMonitorDataMapNodeList" parameterType="plus.gaga.monitor.infrastructure.po.MonitorDataMapNodeField" resultMap="dataMap">
+        select monitor_id, monitor_node_id, log_name, log_index, log_type, attribute_name, attribute_field, attribute_ognl
+        from monitor_data_map_node_field
+        where monitor_id = #{monitorId} and monitor_node_id = #{monitorNodeId}
+    </select>
+
+
     <!--query by id-->
     <select id="queryById" resultMap="MonitorDataMapNodeFieldMap">
         select
