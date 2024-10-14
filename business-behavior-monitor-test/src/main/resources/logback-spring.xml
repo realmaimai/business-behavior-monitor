@@ -100,8 +100,8 @@
 
     <!-- custom monitor appender-->
     <appender name="MONITOR" class="com.maimai.sdk.appender.MonitorSystemAppender">
-        <systemName>partnership-api</systemName>
-        <groupId>com.indeed</groupId>
+        <systemName>big-market</systemName>
+        <groupId>cn.bugstack</groupId>
         <host>127.0.0.1</host>
         <port>6379</port>
     </appender>

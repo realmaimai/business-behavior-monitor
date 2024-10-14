@@ -95,6 +95,5 @@ public class MonitorRepository implements IMonitorRepository {
 
         String cacheKey = Constants.RedisKey.monitor_node_data_count_key + monitorDataEntity.getMonitorId() + Constants.UNDERLINE + monitorDataEntity.getMonitorNodeId();
         redisService.incr(cacheKey);
-
     }
 }

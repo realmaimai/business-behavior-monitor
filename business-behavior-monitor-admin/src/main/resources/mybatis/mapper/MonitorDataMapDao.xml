@@ -10,11 +10,11 @@
         <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
     </resultMap>
 
-    <select id="queryMonitorDataMapEntityList" resultMap="dataMap">
+    <select id="queryMonitorDataMapEntityList" resultMap="MonitorDataMapMap">
         select monitor_id, monitor_name from monitor_data_map
     </select>
 
-    <select id="queryMonitorNameByMonitoryId" parameterType="java.lang.String" resultType="java.lang.String">
+    <select id="queryMonitorNameByMonitorId" parameterType="java.lang.String" resultType="java.lang.String">
         select monitor_name from monitor_data_map where monitor_id = #{monitorId}
     </select>
 

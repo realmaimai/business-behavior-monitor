@@ -25,13 +25,32 @@ id, monitor_id, monitor_name, monitor_node_id, system_name, clazz_name, method_n
         where id = #{id}
     </select>
 
-    <select id="queryMonitorDataMapEntityList" resultMap="dataMap">
+    <select id="queryMonitorDataMapEntityList" resultMap="MonitorDataMap">
         select monitor_id, monitor_name from monitor_data_map
     </select>
 
-    <select id="queryMonitorNameByMonitoryId" parameterType="java.lang.String" resultType="java.lang.String">
+    <select id="queryMonitorNameByMonitorId" parameterType="java.lang.String" resultType="java.lang.String">
         select monitor_name from monitor_data_map where monitor_id = #{monitorId}
     </select>
+
+    <select id="queryMonitorDataList" parameterType="com.maimai.infrastructure.po.MonitorData" resultMap="MonitorDataMap">
+        select monitor_id, monitor_name, monitor_node_id, system_name, clazz_name, method_name,
+        attribute_name, attribute_field, attribute_value
+        from monitor_data
+        <where>
+            <if test="monitorId!=null">
+                and monitor_id = #{monitorId}
+            </if>
+            <if test="monitorName!=null">
+                and monitor_name = #{monitorName}
+            </if>
+            <if test="monitorNodeId!=null">
+                and monitor_node_id = #{monitorNodeId}
+            </if>
+        </where>
+        order by id desc limit 50
+    </select>
+
 
 
     <!--query by specific value-->
@@ -125,10 +144,13 @@ id, monitor_id, monitor_name, monitor_node_id, system_name, clazz_name, method_n
     </select>
 
     <!--insert queries-->
-    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
-        insert into monitor_data(monitor_id, monitor_name, monitor_node_id, system_name, clazz_name, method_name, attribute_name, attribute_field, attribute_value, create_time, update_time)
-        values (#{monitorId}, #{monitorName}, #{monitorNodeId}, #{systemName}, #{clazzName}, #{methodName}, #{attributeName}, #{attributeField}, #{attributeValue}, #{createTime}, #{updateTime})
+    <insert id="insert" parameterType="com.maimai.infrastructure.po.MonitorData">
+        insert into monitor_data(monitor_id, monitor_name, monitor_node_id, system_name, clazz_name, method_name,
+                                 attribute_name, attribute_field, attribute_value, create_time, update_time)
+        values(#{monitorId},#{monitorName},#{monitorNodeId},#{systemName},#{clazzName},#{methodName},
+               #{attributeName},#{attributeField},#{attributeValue},now(),now())
     </insert>
+
 
     <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
         insert into monitor_data(monitor_id, monitor_name, monitor_node_id, system_name, clazz_name, method_name, attribute_name, attribute_field, attribute_value, create_time, update_time)

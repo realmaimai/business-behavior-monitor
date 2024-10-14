@@ -47,6 +47,7 @@ public class RedisPush implements IPush{
         try {
             RTopic topic = redissonClient.getTopic("business-behavior-monitor-sdk-topic");
             topic.publish(logMessage);
+            logger.info("publish topic");
         } catch (Exception e) {
             logger.error("error: topic publish failed ", e);
         }

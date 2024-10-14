@@ -68,12 +68,7 @@ public class MonitorSystemAppender<E> extends AppenderBase<E> {
                 return;
             }
 
-            // sanitize strings
-            String sanitizedClassName = className.replaceAll(".*\\.", "");
-            String sanitizedMethodName = methodName;
-
-            // construct new LogMessage instance
-            LogMessage logMessage = new LogMessage(systemName, sanitizedClassName, sanitizedMethodName,
+            LogMessage logMessage = new LogMessage(systemName, className, methodName,
                     Arrays.asList(event.getFormattedMessage().split(" ")));
             // send message
             try {

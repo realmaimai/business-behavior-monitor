@@ -1,4 +1,4 @@
-package com.indeed.test;
+package cn.bugstack.monitor.test;
 
 import com.alibaba.fastjson.JSON;
 import lombok.Data;
@@ -29,11 +29,18 @@ public class ApiTest {
     }
 
     @Test
+    public void test_log_00() throws InterruptedException {
+        log.info("测试日志00 {} {} {}", user.getUserId(), user.getUserName(), JSON.toJSONString(user));
+    }
+
+    @Test
     public void test_log_01() throws InterruptedException {
         log.info("test01 {} {} {}", user.getUserId(), user.getUserName(), JSON.toJSONString(user));
+    }
 
-        new CountDownLatch(1).await();
-
+    @Test
+    public void test_log_02() throws InterruptedException {
+        log.info("test02 {} {} {}", user.getUserId(), user.getUserName(), JSON.toJSONString(user));
     }
 
     @Data

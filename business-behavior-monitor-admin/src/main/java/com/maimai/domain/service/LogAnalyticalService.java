@@ -8,21 +8,21 @@ import com.maimai.types.Constants;
 import ognl.Ognl;
 import ognl.OgnlContext;
 import ognl.OgnlException;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
 
-/**
- * @author win
- * @since 2024/7/8
- */
+@Service
 public class LogAnalyticalService implements ILogAnalyticalService {
 
     @Resource
     private IMonitorRepository repository;
 
+    // the goal is to get the node information, pass into a monitorData obj, and store in monitor_data table
     @Override
     public void doAnalytical(String systemName, String className, String methodName, List<String> logList) throws OgnlException {
+        // get nodes with certain system name, class name, and method name
         List<GatherNodeExpressionVO> gatherNodeExpressionVOs = repository.queryGatherNodeExpressionVO(systemName, className, methodName);
 
         // no matched node
@@ -30,9 +30,6 @@ public class LogAnalyticalService implements ILogAnalyticalService {
 
         // handle each node
         for (GatherNodeExpressionVO node : gatherNodeExpressionVOs) {
-            // get monitor name from monitor id
-            String monitorName = repository.queryMonitorNameByMonitorId(node.getMonitorId());
-
             List<GatherNodeExpressionVO.Field> fields = node.getFields();
             for (GatherNodeExpressionVO.Field field : fields) {
                 // need to know what is the index of the required log
@@ -58,6 +55,10 @@ public class LogAnalyticalService implements ILogAnalyticalService {
 
                 }
 
+                // get monitor name from monitor id
+                String monitorName = repository.queryMonitorNameByMonitorId(node.getMonitorId());
+
+                // save monitorData to monitor_data table
                 MonitorDataEntity monitorData = MonitorDataEntity.builder()
                         .monitorId(node.getMonitorId())
                         .monitorName(monitorName)
